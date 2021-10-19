@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="5de3cd0f-d3bb-4ddd-a0c0-62ece8dd2156" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="test-sampleFlow" doc:id="df2f938d-a780-45ed-b035-979ac78f9556" >
+		<http:listener doc:name="Listener" doc:id="d341f894-d2e4-473c-a072-e710fd05374a" config-ref="HTTP_Listener_config" path="/tttt"/>
+		<set-variable value="h" doc:name="headerName" doc:id="e32e9127-1f2b-4aa5-92dc-7553409b713a" variableName="headerName"/>
+		<set-variable value="gg" doc:name="headerValue" doc:id="036363f4-93c6-439c-9356-d920c5a55eaf" variableName="headerValue"/>
+		<ee:transform doc:name="Transform Message" doc:id="f29b5080-45ff-4b39-92d7-98920fd07b86" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+"Call to application test-sample successful "]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="b3b49c4a-1e32-464b-8a58-1b266ae43e57" message="#[attributes.headers[vars.headerName]]"/>
+	</flow>
+</mule>
